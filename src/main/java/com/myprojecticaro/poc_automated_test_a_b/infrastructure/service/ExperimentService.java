@@ -9,6 +9,7 @@ import com.myprojecticaro.poc_automated_test_a_b.infrastructure.repository.Exper
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.util.List;
 
 @Service
 public class ExperimentService {
@@ -54,5 +55,20 @@ public class ExperimentService {
 
     public long count() {
         return repo.count();
+    }
+
+
+    public long countA() {
+        return repo.countByVariant(Variant.A);
+    }
+
+    public long countB() {
+        return repo.countByVariant(Variant.B);
+    }
+
+    public double avgMicros() {
+        List<ExperimentRun> runs = repo.findAll();
+        if (runs.isEmpty()) return 0;
+        return runs.stream().mapToLong(ExperimentRun::getMicros).average().orElse(0);
     }
 }
