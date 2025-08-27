@@ -26,15 +26,15 @@ Step-by-step:
 
 1. Two algorithmic variants
 
-  - Variant A → calls **dungeonService.minHealthBottomUp(int[][] dungeon)** (bottom-up DP).
+  - Variant A → calls `dungeonService.minHealthBottomUp(int[][] dungeon)` (bottom-up DP).
 
-  - Variant B → calls dungeonService.minHealthTopDown(int[][] dungeon) (top-down recursion with memo).
+  - Variant B → calls `dungeonService.minHealthTopDown(int[][] dungeon)` (top-down recursion with memo).
 
 2. Choosing the variant
 
-  - If the client sends ?variant=A or ?variant=B in the request, that variant is forced and will be executed.
+  - If the client sends `?variant=A` or `?variant=B` in the request, that variant is forced and will be executed.
 
-  - If no variant is provided, the service randomly assigns a variant according to the configured split (ab.split.a / env AB_SPLIT_A) using the logic:
+  - If no variant is provided, the service randomly assigns a variant according to the configured split (`ab.split.a` / env `AB_SPLIT_A`) using the logic:
 
 ```
 Variant selected = (forced != null) ? forced : (rng.nextInt(100) < splitA ? Variant.A : Variant.B);
@@ -48,7 +48,7 @@ Variant selected = (forced != null) ? forced : (rng.nextInt(100) < splitA ? Vari
 
 4. Persist result
 
-  - The application saves an ExperimentRun record containing: variant, rows, cols, result, micros, clientIp.
+  - The application saves an `ExperimentRun` record containing: variant, rows, cols, result, micros, clientIp.
 
 5. Summary / analysis
 
