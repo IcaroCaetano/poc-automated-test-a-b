@@ -6,6 +6,11 @@ import com.myprojecticaro.poc_automated_test_a_b.application.dto.DungeonResponse
 import com.myprojecticaro.poc_automated_test_a_b.application.dto.RunSummaryResponse;
 import com.myprojecticaro.poc_automated_test_a_b.domain.model.Variant;
 import com.myprojecticaro.poc_automated_test_a_b.infrastructure.service.ExperimentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
@@ -23,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping(path = "/api/v1", produces = MediaType.APPLICATION_JSON_VALUE)
+@Tag(name = "Dungeon Experiments", description = "Endpoints for running dungeon A/B experiments and retrieving summary statistics")
 public class DungeonController {
 
     private final ExperimentService experimentService;
@@ -49,6 +55,17 @@ public class DungeonController {
      * @param httpReq  the HTTP request, used to extract the client IP for tracking
      * @return a {@link DungeonResponse} containing the result, execution time, and variant information
      */
+    @Operation(
+            summary = "Run dungeon minimum initial health experiment",
+            description = "Calculates the minimum initial health required for a dungeon grid. " +
+                    "Supports optional A/B test variant selection. " +
+                    "If variant is not provided, the system selects one automatically.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Experiment executed successfully",
+                            content = @Content(schema = @Schema(implementation = DungeonResponse.class))),
+                    @ApiResponse(responseCode = "400", description = "Invalid request payload")
+            }
+    )
     @PostMapping(path = "/dungeon/min-initial-health", consumes = MediaType.APPLICATION_JSON_VALUE)
     public DungeonResponse minInitial(
             @Valid @RequestBody DungeonRequest request,
@@ -80,6 +97,14 @@ public class DungeonController {
      *
      * @return a {@link RunSummaryResponse} containing aggregated experiment statistics
      */
+    @Operation(
+            summary = "Get summary of all dungeon experiments",
+            description = "Returns aggregated statistics of executed experiments, including counts for each variant and average execution time.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Summary retrieved successfully",
+                            content = @Content(schema = @Schema(implementation = RunSummaryResponse.class)))
+            }
+    )
     @GetMapping("/experiments/summary")
     public RunSummaryResponse summary() {
         return new RunSummaryResponse(
