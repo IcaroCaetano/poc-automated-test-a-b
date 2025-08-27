@@ -44,15 +44,116 @@ Variant selected = (forced != null) ? forced : (rng.nextInt(100) < splitA ? Vari
 
   - The chosen algorithm runs and computes the minimum initial health.
 
-  - Execution time is measured using Stopwatch in microseconds.
+  - Execution time is measured using `Stopwatch` in microseconds.
 
 4. Persist result
 
-  - The application saves an `ExperimentRun` record containing: variant, rows, cols, result, micros, clientIp.
+  - The application saves an `ExperimentRun` record containing: `variant`, `rows`, `cols`, `result`, `micros`, `clientIp`.
 
 5. Summary / analysis
 
-  - Use the /api/v1/experiments/summary endpoint to retrieve aggregated results: total runs, runs per variant, and average execution time.
+  - Use the `/api/v1/experiments/summary` endpoint to retrieve aggregated results: total runs, runs per variant, and average execution time.
+
+## 🧱 Architecture (packages)
+
+```
+com.myprojecticaro.poc_automated_test_a_b
+├── application # REST controllers, DTOs, configuration (API layer)
+├── domain # Business logic (DungeonService, entities, enums)
+└── infrastructure # Persistence (JPA repositories, migrations), external adapters
+```
+Names may vary slightly in your current codebase; align as needed.
+
+
+## 🔌 REST API
+
+Base path: `/api/v1`
+
+### 1) Run experiment (A/B)
+
+POST `/api/v1/dungeon/min-initial-health`
+
+Query params
+
+- `variant` (optional): `A` or `B`. If omitted, the service randomly assigns according to AB_SPLIT_A.
+
+Request body (example)
+```
+{
+"dungeon": [
+[ -2, -3, 3 ],
+[ -5, -10, 1 ],
+[ 10, 30, -5 ]
+]
+}
+```
+
+Response (example)
+```
+{
+"variant": "A",
+"rows": 3,
+"cols": 3,
+"result": 7,
+"micros": 312,
+"storedId": 42
+}
+```
+cURL
+```
+# Random A/B (based on AB_SPLIT_A)
+curl -sS -X POST "http://localhost:8080/api/v1/dungeon/min-initial-health" \
+-H 'Content-Type: application/json' \
+-d '{"dungeon":[[-2,-3,3],[-5,-10,1],[10,30,-5]]}' | jq
+
+
+# Force Variant A
+curl -sS -X POST "http://localhost:8080/api/v1/dungeon/min-initial-health?variant=A" \
+-H 'Content-Type: application/json' \
+-d '{"dungeon":[[-2,-3,3],[-5,-10,1],[10,30,-5]]}' | jq
+```
+
+### 2) Summary
+GET `/api/v1/experiments/summary`
+
+Response (example)
+```
+{
+"totalRuns": 128,
+"variantACount": 63,
+"variantBCount": 65,
+"avgMicros": 284.7
+}
+```
+
+## 🗄️ Database
+
+PostgreSQL with Flyway migrations. Minimal schema:
+
+```
+create table if not exists experiment_run (
+id bigserial primary key,
+variant varchar(16) not null,
+rows int not null,
+cols int not null,
+result int not null,
+micros bigint not null,
+created_at timestamptz not null default now(),
+client_ip text
+);
+```
+
+### Environment variables
+
+## 📖 Swagger / OpenAPI
+
+- Swagger UI: `http://localhost:8080/swagger-ui.html`
+
+- OpenAPI JSON: `http://localhost:8080/v3/api-docs`
+
+The controller uses Springdoc annotations (`@Tag`, `@Operation`, `@ApiResponse`, `@ExampleObject`) so the UI will display request/response schemas and examples.
+
+
 
 ## Key Features
 
