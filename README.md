@@ -139,7 +139,3 @@ or
 This allows automated benchmarking between the two experiment versions.
 
 ---
-
-## 📜 License
-
-This project is licensed under the MIT License.
