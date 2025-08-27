@@ -1,141 +1,72 @@
-# poc_automated_test_a_b
+# A/B Test Project
 
-This project is a **Proof of Concept (POC)** to implement an **Automated A/B Test** using **Spring Boot** and **Java**.
+This project demonstrates the implementation of A/B testing to evaluate different variants of a given feature and measure their impact on system performance and user behavior.
 
----
+## Project Overview
 
-## 📌 Project Overview
+The application randomly assigns requests to one of two variants:
+- **Variant A**
+- **Variant B**
 
-The application simulates A/B testing experiments by exposing REST APIs to evaluate and compare two different approaches (Experiment A and Experiment B).  
-The goal is to measure performance differences (e.g., execution time in microseconds) and provide summary results for decision-making.
+Each variant represents a different path, algorithm, or logic in the system. By running both variants simultaneously with real requests, the project enables comparative analysis of performance, reliability, and outcomes.
 
----
+## Key Features
 
-## 🛠️ Technologies Used
+- **A/B Variant Selection**: Requests are automatically split between Variant A and Variant B.
+- **Data Collection**: Each request is tracked to determine the assigned variant and response outcome.
+- **Performance Metrics**: Results are measured to evaluate which variant performs better under real-world conditions.
 
-- **Java 23**
-- **Spring Boot**
-- **Spring Web**
-- **Maven/Gradle**
-- **JUnit 5** for testing
+## Example Usage
 
----
+### Request Body
 
-## 📂 Package Structure
-
-```
-com.myprojecticaro.poc_automated_test_a_b
-│
-├── controller       # REST Controllers exposing endpoints
-├── service          # Business logic and A/B experiment services
-├── model            # DTOs and response objects
-└── PocAutomatedTestABApplication.java   # Main application entrypoint
-```
-
----
-
-## 🚀 How to Run the Application
-
-### 1. Clone the repository
-```bash
-git clone https://github.com/your-username/poc_automated_test_a_b.git
-cd poc_automated_test_a_b
-```
-
-### 2. Build the project
-Using Maven:
-```bash
-mvn clean install
-```
-
-Using Gradle:
-```bash
-./gradlew build
-```
-
-### 3. Run the application
-```bash
-mvn spring-boot:run
-```
-or
-```bash
-./gradlew bootRun
-```
-
----
-
-## 📡 API Endpoints
-
-### 🔹 Run Experiment A
-**POST** `/experiments/a`  
-Request Body:
 ```json
 {
-  "dungeon": [[0]]
-}
-```
-Response:
-```json
-{
-  "result": "some-value"
+  "dungeon": [
+    [0]
+  ]
 }
 ```
 
-### 🔹 Run Experiment B
-**POST** `/experiments/b`  
-Request Body:
-```json
-{
-  "dungeon": [[0]]
-}
-```
-Response:
-```json
-{
-  "result": "some-value"
-}
-```
+### Enum Definition
 
-### 🔹 Experiment Summary
-**GET** `/experiments/summary`  
-Response:
-```json
-{
-  "countA": 10,
-  "countB": 12,
-  "avgMicros": 1532
+```java
+/**
+ * Represents the two possible variants for A/B testing.
+ */
+public enum Variant {
+    /**
+     * Variant A - baseline version of the test.
+     */
+    A,
+
+    /**
+     * Variant B - alternative version of the test.
+     */
+    B
 }
 ```
 
----
+## How A/B Testing Works in This Project
 
-## ✅ A/B Test Workflow
+1. **Assignment**: Each incoming request is randomly assigned to Variant A or Variant B.
+2. **Execution**: The assigned variant's logic is executed.
+3. **Tracking**: The system logs which variant was used and its response.
+4. **Analysis**: Collected data is analyzed to compare success rates, performance, or other KPIs.
 
-1. A client sends requests to both `/experiments/a` and `/experiments/b`.
-2. The service records the **execution count** and **average runtime (µs)**.
-3. Access `/experiments/summary` to get aggregated results of the A/B test.
+## Benefits of A/B Testing
 
----
+- Provides **data-driven decisions** instead of assumptions.
+- Allows for **controlled experiments** with minimal risk.
+- Improves **system performance and user satisfaction** by validating changes before full rollout.
 
-## 🧪 Running Tests
+## Getting Started
 
-To run the unit and integration tests:
-```bash
-mvn test
-```
-or
-```bash
-./gradlew test
-```
+1. Clone this repository.
+2. Build and run the application.
+3. Send requests with the provided schema.
+4. Analyze logs and results to compare Variant A and Variant B.
 
----
+## License
 
-## 📈 Example Usage of A/B Test
-
-1. Send 100 requests to `/experiments/a`.
-2. Send 100 requests to `/experiments/b`.
-3. Check `/experiments/summary` to compare performance.
-
-This allows automated benchmarking between the two experiment versions.
-
----
+This project is licensed under the MIT License.
