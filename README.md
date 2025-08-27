@@ -26,7 +26,7 @@ Step-by-step:
 
 1. Two algorithmic variants
 
-  - Variant A → calls dungeonService.minHealthBottomUp(int[][] dungeon) (bottom-up DP).
+  - Variant A → calls **dungeonService.minHealthBottomUp(int[][] dungeon)** (bottom-up DP).
 
   - Variant B → calls dungeonService.minHealthTopDown(int[][] dungeon) (top-down recursion with memo).
 
