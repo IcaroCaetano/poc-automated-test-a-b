@@ -1,8 +1,8 @@
-#poc_automated_test_a_b
+# poc_automated_test_a_b
 
 POC for automated A/B testing using Spring Boot (Java 23), PostgreSQL, and Swagger/OpenAPI. The service compares two algorithmic variants for the classic Dungeon Game problem and records results for later analysis.
 
-##✨ What this project does
+## ✨ What this project does
 
 - Exposes a REST API to compute the minimum initial health needed to rescue the princess in a dungeon grid.
 
@@ -18,7 +18,7 @@ POC for automated A/B testing using Spring Boot (Java 23), PostgreSQL, and Swagg
 
 - Provides a summary endpoint and Swagger UI.
 
-##🧠 How A/B testing works here (explicit)
+## 🧠 How A/B testing works here (explicit)
 
 Where it happens: the A/B decision and execution happen inside ExperimentService.run(...).
 
