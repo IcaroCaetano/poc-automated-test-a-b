@@ -104,23 +104,34 @@ public class DungeonService {
     /**
      * Depth-first search helper function for the top-down recursive solution.
      *
-     * @param i    current row index
-     * @param j    current column index
-     * @param d    dungeon grid
-     * @param m    total number of rows
-     * @param n    total number of columns
+     * @param row   current row index
+     * @param col   current column index
+     * @param dungeon    dungeon grid
+     * @param totalRows    total number of rows
+     * @param totalCols    total number of columns
      * @param memo memoization cache to store intermediate results
      * @return the minimum health required at position (i,j)
      */
-    private int dfs(int i, int j, int[][] d, int m, int n, Integer[][] memo) {
-        if (i >= m || j >= n) return Integer.MAX_VALUE/4;
-        if (memo[i][j] != null) return memo[i][j];
+    private int dfs(int row, int col, int[][] dungeon, int totalRows, int totalCols, Integer[][] memo) {
+        // If out of bounds, return a very large value to ignore this path
+        if (row >= totalRows || col >= totalCols)
+            return Integer.MAX_VALUE / 4;
+
+        // Return previously computed result if available
+        if (memo[row][col] != null)
+            return memo[row][col];
 
         // Base case: bottom-right cell (destination)
-        if (i == m-1 && j == n-1)
-            return memo[i][j] = Math.max(1, 1 - d[i][j]);
+        if (row == totalRows - 1 && col == totalCols - 1)
+            return memo[row][col] = Math.max(1, 1 - dungeon[row][col]);
 
-        int need = Math.min(dfs(i+1,j,d,m,n,memo), dfs(i,j+1,d,m,n,memo)) - d[i][j];
-        return memo[i][j] = need <= 0 ? 1 : need;
+        // Minimum health needed to move right or down
+        int minHealthNeeded = Math.min(
+                dfs(row + 1, col, dungeon, totalRows, totalCols, memo),
+                dfs(row, col + 1, dungeon, totalRows, totalCols, memo)
+        ) - dungeon[row][col];
+
+        // Ensure at least 1 health is required
+        return memo[row][col] = minHealthNeeded <= 0 ? 1 : minHealthNeeded;
     }
 }
