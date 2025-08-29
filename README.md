@@ -80,23 +80,23 @@ Query params
 Request body (example)
 ```json
 {
-"dungeon": [
-[ -2, -3, 3 ],
-[ -5, -10, 1 ],
-[ 10, 30, -5 ]
-]
+  "dungeon": [
+    [ -2, -3, 3 ],
+    [ -5, -10, 1 ],
+    [ 10, 30, -5 ]
+  ]
 }
 ```
 
 Response (example)
 ```json
 {
-"variant": "A",
-"rows": 3,
-"cols": 3,
-"result": 7,
-"micros": 312,
-"storedId": 42
+  "variant": "A",
+  "rows": 3,
+  "cols": 3,
+  "result": 7,
+  "micros": 312,
+  "storedId": 42
 }
 ```
 cURL
@@ -117,12 +117,12 @@ curl -sS -X POST "http://localhost:8080/api/v1/dungeon/min-initial-health?varian
 GET `/api/v1/experiments/summary`
 
 Response (example)
-```
+```json
 {
-"totalRuns": 128,
-"variantACount": 63,
-"variantBCount": 65,
-"avgMicros": 284.7
+  "totalRuns": 128,
+  "variantACount": 63,
+  "variantBCount": 65,
+  "avgMicros": 284.7
 }
 ```
 
