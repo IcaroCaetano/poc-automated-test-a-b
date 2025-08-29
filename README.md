@@ -78,7 +78,7 @@ Query params
 - `variant` (optional): `A` or `B`. If omitted, the service randomly assigns according to AB_SPLIT_A.
 
 Request body (example)
-```
+```json
 {
 "dungeon": [
 [ -2, -3, 3 ],
@@ -89,7 +89,7 @@ Request body (example)
 ```
 
 Response (example)
-```
+```json
 {
 "variant": "A",
 "rows": 3,
